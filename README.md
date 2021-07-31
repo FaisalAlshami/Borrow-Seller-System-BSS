@@ -21,7 +21,6 @@ consumer is provided with a shopping application to buy goods from suppliers.
 This document will discuss in detail the requirements, design and underlying technologies to create
 and implement this ecommerce website.
 
-![register](https://user-images.githubusercontent.com/23058510/127736763-eaf69237-6df1-4f1b-8336-d506a259a642.PNG)
 BSS (Borrow-Seller System) is a single page application E-commerce website that is designed to
 facilitate the selling and purchasing of products between online store owners and their suppliers.
 Online shopping has become a popular way of shopping for consumers. This new innovation
@@ -47,7 +46,7 @@ an easy and convenient way to search for products where a user can Search for a 
 interactively and the search engine would refine the products available based on the user’s input.
 
 
-# Requirements (The technologies used in this project):
+## Requirements (The technologies used in this project):
 In Front-End:
 1. VSCode
 2. VueJS
@@ -70,4 +69,9 @@ In Back-End:
 10. MySQL connector.
 11. Spring Boot Security.
 12. Junit
+
+
+
+
+![register](https://user-images.githubusercontent.com/23058510/127736763-eaf69237-6df1-4f1b-8336-d506a259a642.PNG)
 
