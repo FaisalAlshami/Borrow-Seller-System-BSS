@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.SysMenuMapper">
+
+    <resultMap type="MenuList" id="menuResultMap">
+        <id property="menuId" column="menuId"/>
+        <result property="menuName" column="menuName"/>
+        <result property="menuUrl" column="menuUrl"/>
+        <result property="parentId" column="parentId"/>
+        <result property="menuOrder" column="menuOrder"/>
+        <result property="menuIcon" column="menuIcon"/>
+        <result property="menuType" column="menuType"/>
+        <collection property="subMenuList" ofType="SysMenu">
+            <id property="menuId" column="submenuId"/>
+            <result property="menuName" column="submenuName"/>
+            <result property="menuUrl" column="submenuUrl"/>
+            <result property="parentId" column="subparentId"/>
+            <result property="menuOrder" column="submenuOrder"/>
+            <result property="menuIcon" column="submenuIcon"/>
+            <result property="menuType" column="submenuType"/>
+        </collection>
+    </resultMap>
+
+
+    <resultMap type="MenuRouters" id="MenuRoutersMap">
+
+        <result property="path" column="menuUrl"/>
+        <result property="component" column="component"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <!--public List<MenuRouters> getAllMenuRouters();-->
+    <select id="getAllMenuRouters"  resultMap="MenuRoutersMap">
+    select  menu_Url menuUrl,component, M_NAMEE name from sys_menu
+    where enable=1 and menu_type!=0 and menu_name !='Home'
+    </select>
+
+
+    <sql id="selectMenu">
+         select
+         mainmenu.menu_id menuId,mainmenu.menu_name menuName
+        ,mainmenu.menu_url menuUrl,mainmenu.parent_id parentId,mainmenu.menu_order menuOrder
+        ,mainmenu.menu_icon menuIcon,mainmenu.menu_type menuType
+        ,submenu.menu_id submenuId,submenu.menu_name submenuName
+        ,submenu.menu_url submenuUrl,submenu.parent_id subparentId,submenu.menu_order submenuOrder
+        ,submenu.menu_icon submenuIcon,submenu.menu_type submenuType
+
+    </sql>
+
+    <sql id="MenujoinRelationShip">
+        from (select * from sys_menu where menu_type in (1,0)) mainmenu left outer join
+			(select * from sys_menu where menu_type in (2)) submenu
+        on(mainmenu.menu_url = submenu.parent_id)
+    </sql>
+
+
+    <select id="getAllMenuList" resultMap="menuResultMap">
+
+       <include refid="selectMenu"></include>
+        <include refid="MenujoinRelationShip"></include>
+
+        order by menuType desc
+    </select>
+
+    <select id="getMenuListByUserName" parameterType="String" resultMap="menuResultMap">
+        <include refid="selectMenu"></include>
+        <include refid="MenujoinRelationShip"></include>
+				where mainmenu.menu_id in (select menu_id from sys_menu_role_relationship
+				where role_id =(select role_id from sys_user where  username=#{username}))
+
+        order by menuType desc
+    </select>
+
+    <!-- one user get many roles -->
+    <select id="getMenuListByUserName2" parameterType="String" resultMap="menuResultMap">
+        <include refid="selectMenu"></include>
+        <include refid="MenujoinRelationShip"></include>
+				where mainmenu.menu_id in
+							(select DISTINCT menu_id from sys_menu_role_relationship  where role_id in
+										(select role_id from sys_user_role_relationship
+											where user_id in(select user_id from sys_user where username=#{username})))
+        order by menuType desc
+    </select>
+
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.WalletTransactionAuditMapper">
+
+    <resultMap type="WalletTransactionAudit" id="walletTransAuditResultMap">
+        <id property="TRANSACTION_AUDIT_ID" column="TRANSACTION_AUDIT_ID"/>
+        <result property="BUYER_ID" column="BUYER_ID"/>
+        <result property="TRANSACTION_ID" column="TRANSACTION_ID"/>
+        <result property="AVAILABLE_MONEY_BEFORE" column="AVAILABLE_MONEY_BEFORE"/>
+        <result property="DEPOSITING_MONEY_BEFORE" column="DEPOSITING_MONEY_BEFORE"/>
+        <result property="WITHDRAWING_MONEY_BEFORE" column="WITHDRAWING_MONEY_BEFORE"/>
+        <result property="COMMISSION_BEFORE" column="COMMISSION_BEFORE"/>
+
+        <result property="OPERATE_MONEY" column="OPERATE_MONEY"/>
+        <result property="OPERATE_TYPE" column="OPERATE_TYPE"/>
+        <result property="AVAILABLE_MONEY_AFTER" column="AVAILABLE_MONEY_AFTER"/>
+        <result property="DEPOSITING_MONEY_AFTER" column="DEPOSITING_MONEY_AFTER"/>
+        <result property="WITHDRAWING_MONEY_AFTER" column="WITHDRAWING_MONEY_AFTER"/>
+        <result property="COMMISSION_AFTER" column="COMMISSION_AFTER"/>
+
+        <result property="DEPOSITING_MONEY_ACTUAL" column="DEPOSITING_MONEY_ACTUAL"/>
+        <result property="WITHDRAWING_MONEY_ACTUAL" column="WITHDRAWING_MONEY_ACTUAL"/>
+        <result property="COMMISSION_MONEY_ACTUAL" column="COMMISSION_MONEY_ACTUAL"/>
+
+        <result property="TRANSACTION_TYPE_ID" column="TRANSACTION_TYPE_ID"/>
+        <result property="IS_CANCEL" column="IS_CANCEL"/>
+        <result property="REASON_CANCEL" column="REASON_CANCEL"/>
+
+        <result property="OPERATE_BY" column="OPERATE_BY"/>
+        <result property="STATUS" column="STATUS"/>
+        <result property="CREATE_BY" column="CREATE_BY"/>
+        <result property="CREATE_TIME" column="CREATE_TIME"/>
+        <result property="LAST_UPDATE_BY" column="LAST_UPDATE_BY"/>
+        <result property="LAST_UPDATE_TIME" column="LAST_UPDATE_TIME"/>
+        <result property="order_id" column="order_id"/>
+
+
+
+        <association property="commissionType" javaType="CommissionType">
+            <id property="transaction_type_id" column="transaction_type_id"/>
+            <result property="transaction_type_name" column="transaction_type_name"/>
+        </association>
+
+    </resultMap>
+    <sql id="sltwa">
+      SELECT `TRANSACTION_AUDIT_ID`, `BUYER_ID`,
+      `TRANSACTION_ID`, `AVAILABLE_MONEY_BEFORE`, `DEPOSITING_MONEY_BEFORE`,
+       `WITHDRAWING_MONEY_BEFORE`,`COMMISSION_BEFORE`, `OPERATE_MONEY`, `OPERATE_TYPE`,
+       `AVAILABLE_MONEY_AFTER`,`DEPOSITING_MONEY_AFTER`, `WITHDRAWING_MONEY_AFTER`, `COMMISSION_AFTER`,
+       `DEPOSITING_MONEY_ACTUAL`, `WITHDRAWING_MONEY_ACTUAL`, `COMMISSION_MONEY_ACTUAL`,
+       `TRANSACTION_TYPE_ID`, `IS_CANCEL`, `REASON_CANCEL`,
+       `OPERATE_BY`, `STATUS`,
+      `CREATE_BY`, `CREATE_TIME`, `LAST_UPDATE_BY`, `LAST_UPDATE_TIME`, `order_id`
+      FROM `wallet_transaction_record`
+
+    </sql>
+    <sql id="sltwaall">
+        SELECT w.`TRANSACTION_AUDIT_ID`, w.`BUYER_ID`, w.`TRANSACTION_ID`,
+        w.`AVAILABLE_MONEY_BEFORE`, w.`DEPOSITING_MONEY_BEFORE`, w.`WITHDRAWING_MONEY_BEFORE`,
+        w.`COMMISSION_BEFORE`, w.`OPERATE_MONEY`, w.`OPERATE_TYPE`, w.`AVAILABLE_MONEY_AFTER`,
+        w.`DEPOSITING_MONEY_AFTER`, w.`WITHDRAWING_MONEY_AFTER`, w.`COMMISSION_AFTER`, w.`DEPOSITING_MONEY_ACTUAL`,
+        w.`WITHDRAWING_MONEY_ACTUAL`, w.`COMMISSION_MONEY_ACTUAL`, w.`TRANSACTION_TYPE_ID`, w.`IS_CANCEL`,
+        w.`REASON_CANCEL`, w.`OPERATE_BY`, w.`STATUS`, w.`CREATE_BY`, w.`CREATE_TIME`, w.`LAST_UPDATE_BY`,
+        w.`LAST_UPDATE_TIME` ,tr.transaction_type_name,w.`order_id`
+        FROM `wallet_transaction_record`  as w,transaction_type as tr
+        WHERE w.TRANSACTION_TYPE_ID=tr.transaction_type_id and w.IS_CANCEL=0
+    </sql>
+
+    <sql id="sltwacanceled">
+        SELECT w.`TRANSACTION_AUDIT_ID`, w.`BUYER_ID`, w.`TRANSACTION_ID`,
+        w.`AVAILABLE_MONEY_BEFORE`, w.`DEPOSITING_MONEY_BEFORE`, w.`WITHDRAWING_MONEY_BEFORE`,
+        w.`COMMISSION_BEFORE`, w.`OPERATE_MONEY`, w.`OPERATE_TYPE`, w.`AVAILABLE_MONEY_AFTER`,
+        w.`DEPOSITING_MONEY_AFTER`, w.`WITHDRAWING_MONEY_AFTER`, w.`COMMISSION_AFTER`, w.`DEPOSITING_MONEY_ACTUAL`,
+        w.`WITHDRAWING_MONEY_ACTUAL`, w.`COMMISSION_MONEY_ACTUAL`, w.`TRANSACTION_TYPE_ID`, w.`IS_CANCEL`,
+        w.`REASON_CANCEL`, w.`OPERATE_BY`, w.`STATUS`, w.`CREATE_BY`, w.`CREATE_TIME`, w.`LAST_UPDATE_BY`,
+        w.`LAST_UPDATE_TIME` ,tr.transaction_type_name,w.`order_id`
+        FROM `wallet_transaction_record`  as w,transaction_type as tr
+        WHERE w.TRANSACTION_TYPE_ID=tr.transaction_type_id and w.IS_CANCEL=1
+    </sql>
+
+    <sql id="orderby">
+        order by w.`TRANSACTION_AUDIT_ID` desc
+    </sql>
+    <insert id="insertWalletTransAudit" useGeneratedKeys="true" keyProperty="TRANSACTION_AUDIT_ID"  parameterType="WalletTransactionAudit">
+       INSERT INTO `wallet_transaction_record`
+            (`TRANSACTION_AUDIT_ID`, `BUYER_ID`, `TRANSACTION_ID`,
+            `AVAILABLE_MONEY_BEFORE`, `DEPOSITING_MONEY_BEFORE`, `WITHDRAWING_MONEY_BEFORE`,`COMMISSION_BEFORE`,
+            `OPERATE_MONEY`, `OPERATE_TYPE`, `AVAILABLE_MONEY_AFTER`, `DEPOSITING_MONEY_AFTER`,
+            `WITHDRAWING_MONEY_AFTER`, `COMMISSION_AFTER`,
+            `DEPOSITING_MONEY_ACTUAL`, `WITHDRAWING_MONEY_ACTUAL`,`COMMISSION_MONEY_ACTUAL`,
+            `TRANSACTION_TYPE_ID`, `IS_CANCEL`, `REASON_CANCEL`,
+            `OPERATE_BY`, `STATUS`, `CREATE_BY`,
+            `CREATE_TIME`, `LAST_UPDATE_BY`, `LAST_UPDATE_TIME`,`order_id`)
+         VALUES (
+            null,#{BUYER_ID},#{TRANSACTION_ID},
+            #{AVAILABLE_MONEY_BEFORE},#{DEPOSITING_MONEY_BEFORE},#{WITHDRAWING_MONEY_BEFORE},#{COMMISSION_BEFORE},
+            #{OPERATE_MONEY},#{OPERATE_TYPE},#{AVAILABLE_MONEY_AFTER},#{DEPOSITING_MONEY_AFTER},
+            #{WITHDRAWING_MONEY_AFTER},#{COMMISSION_AFTER},
+            #{DEPOSITING_MONEY_ACTUAL},#{WITHDRAWING_MONEY_ACTUAL},#{COMMISSION_MONEY_ACTUAL},
+            #{TRANSACTION_TYPE_ID},#{IS_CANCEL},#{REASON_CANCEL},
+            #{OPERATE_BY},#{STATUS},#{CREATE_BY},
+            #{CREATE_TIME},#{LAST_UPDATE_BY},#{LAST_UPDATE_TIME},#{order_id})
+    </insert>
+    <update  id="updateWalletTransAudit" parameterType="WalletTransactionAudit">
+      UPDATE `wallet_transaction_record`
+      SET `BUYER_ID`=#{BUYER_ID},
+      `TRANSACTION_ID`=#{TRANSACTION_ID},`AVAILABLE_MONEY_BEFORE`=#{AVAILABLE_MONEY_BEFORE},
+      `DEPOSITING_MONEY_BEFORE`=#{DEPOSITING_MONEY_BEFORE},`WITHDRAWING_MONEY_BEFORE`=#{WITHDRAWING_MONEY_BEFORE},
+      `COMMISSION_BEFORE`=#{COMMISSION_BEFORE},
+      `OPERATE_MONEY`=#{OPERATE_MONEY},`OPERATE_TYPE`=#{OPERATE_TYPE},
+      `AVAILABLE_MONEY_AFTER`=#{AVAILABLE_MONEY_AFTER},`DEPOSITING_MONEY_AFTER`=#{DEPOSITING_MONEY_AFTER},
+      `WITHDRAWING_MONEY_AFTER`=#{WITHDRAWING_MONEY_AFTER},
+      `COMMISSION_AFTER`=#{COMMISSION_AFTER},
+
+        `DEPOSITING_MONEY_ACTUAL`=#{DEPOSITING_MONEY_ACTUAL},
+        `WITHDRAWING_MONEY_ACTUAL`=#{WITHDRAWING_MONEY_ACTUAL},
+        `COMMISSION_MONEY_ACTUAL`=#{COMMISSION_MONEY_ACTUAL},
+
+      `OPERATE_BY`=#{OPERATE_BY},
+      `STATUS`=#{STATUS},`CREATE_BY`=#{CREATE_BY},
+      `CREATE_TIME`=#{CREATE_TIME},
+      `LAST_UPDATE_BY`=#{LAST_UPDATE_BY},
+      `LAST_UPDATE_TIME`=#{LAST_UPDATE_TIME},
+       `order_id`=#{order_id}
+       WHERE TRANSACTION_AUDIT_ID=#{TRANSACTION_AUDIT_ID}
+    </update>
+
+    <select id="getById" parameterType="java.lang.Integer" resultMap="walletTransAuditResultMap" >
+        <include refid="sltwa"></include>
+        where TRANSACTION_AUDIT_ID = #{transaction_audit_id}
+    </select>
+
+    <select id="getAllTransactions" parameterType="java.lang.Integer" resultMap="walletTransAuditResultMap" >
+        <include refid="sltwaall"></include>
+        and  BUYER_ID = #{buyer_id}
+        <include refid="orderby"></include>
+
+    </select>
+
+    <select id="getAllTransCanceled" parameterType="java.lang.Integer" resultMap="walletTransAuditResultMap" >
+        <include refid="sltwacanceled"></include>
+        and  BUYER_ID = #{buyer_id}
+        <include refid="orderby"></include>
+    </select>
+
+    <select id="getTransPaidByOrderId" parameterType="java.lang.Integer" resultMap="walletTransAuditResultMap" >
+        <include refid="sltwaall"></include>
+        and  w.TRANSACTION_TYPE_ID = #{TRANSACTION_TYPE_ID}
+        and  w.order_id = #{order_id}
+        <include refid="orderby"></include>
+    </select>
+
+
+</mapper>

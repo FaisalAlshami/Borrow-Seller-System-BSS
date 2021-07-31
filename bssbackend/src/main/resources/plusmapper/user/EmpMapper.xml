@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.EmpMapper">
+
+    <resultMap type="Emp" id="empResultMap">
+        <id property="empno" column="empno"/>
+        <result property="ename" column="ename"/>
+        <result property="job" column="job"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="sal" column="sal"/>
+        <result property="deptno" column="deptno"/>
+        <association property="dept" javaType="Dept">
+            <id property="deptno" column="deptno"/>
+            <result property="dname" column="dname"/>
+            <result property="loc" column="loc"/>
+        </association>
+    </resultMap>
+
+    <select id="selectById" parameterType="int"  resultMap="empResultMap">
+        select empno,ename,job,hiredate,sal,emp.deptno ,dname,loc
+        from emp ,dept where emp.deptno=dept.deptno
+        and emp.empno=#{id}+
+    </select>
+
+
+    <select id="selectById2" parameterType="int"  resultType="empdept">
+        select empno,ename,job,hiredate,sal,emp.deptno ,dname,loc
+        from emp ,dept where emp.deptno=dept.deptno
+        and emp.empno=#{id}
+    </select>
+
+
+    <select id="selectAll2" resultType="emp">
+	SELECT * FROM emp ${ew.customSqlSegment}
+    </select>
+</mapper>

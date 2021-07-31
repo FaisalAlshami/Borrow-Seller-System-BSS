@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.SysRoleMapper">
+
+    <select id="verifyUserRoleWithUserIdAndTargetUrl" parameterType="UserRole"  resultType="Integer">
+        select count(*) from sys_menu where MENU_ID in(
+            select DISTINCT menu_id from sys_menu_role_relationship
+            where role_id in(
+            select  role_id
+            from sys_user_role_relationship
+            where user_id =#{userId}
+            )) and  MENU_URL=#{targetUrl}
+    </select>
+
+    <select id="findRolesByUsername" parameterType="String" resultType="SysRole">
+        select role_name roleName from sys_role where role_id in(
+            select role_id from sys_user_role_relationship
+                        where user_id in(select user_id
+                                            from sys_user
+                                            where username=#{username})
+        )
+    </select>
+
+</mapper>

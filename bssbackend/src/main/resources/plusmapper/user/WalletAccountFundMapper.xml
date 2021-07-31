@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.WalletAccountFundMapper">
+
+    <resultMap type="WalletAccountFund" id="walletAccountfundResultMap">
+        <id property="BUYER_ID" column="BUYER_ID"/>
+        <result property="AVAILABLE_MONEY" column="AVAILABLE_MONEY"/>
+        <result property="DEPOSITING_MONEY" column="DEPOSITING_MONEY"/>
+        <result property="WITHDRAWING_MONEY" column="WITHDRAWING_MONEY"/>
+        <result property="COMMISSION" column="COMMISSION"/>
+        <result property="CREATE_BY" column="CREATE_BY"/>
+        <result property="CREATE_TIME" column="CREATE_TIME"/>
+        <result property="LAST_UPDATE_BY" column="LAST_UPDATE_BY"/>
+        <result property="LAST_UPDATE_TIME" column="LAST_UPDATE_TIME"/>
+        <result property="CURRENCY" column="CURRENCY"/>
+
+
+    </resultMap>
+    <sql id="sltwa">
+       SELECT `BUYER_ID`, `AVAILABLE_MONEY`, `DEPOSITING_MONEY`,
+       `WITHDRAWING_MONEY`,`COMMISSION`, `CREATE_BY`, `CREATE_TIME`,
+       `LAST_UPDATE_BY`, `LAST_UPDATE_TIME`, `CURRENCY`
+       FROM `wallet_account_fund`
+
+    </sql>
+    <insert id="insertWalletAccfund" parameterType="WalletAccountFund">
+        INSERT INTO `wallet_account_fund`
+        (`BUYER_ID`, `AVAILABLE_MONEY`, `DEPOSITING_MONEY`,
+        `WITHDRAWING_MONEY`, `COMMISSION`,`CREATE_BY`, `CREATE_TIME`,
+        `LAST_UPDATE_BY`, `LAST_UPDATE_TIME`, `CURRENCY`)
+        VALUES (#{BUYER_ID},#{AVAILABLE_MONEY},#{DEPOSITING_MONEY},
+        #{WITHDRAWING_MONEY},#{COMMISSION},#{CREATE_BY},#{CREATE_TIME},
+        #{LAST_UPDATE_BY},#{LAST_UPDATE_TIME},#{CURRENCY})
+    </insert>
+    <update  id="updateWalletAccfund" parameterType="WalletAccountFund">
+        update wallet_account_fund set
+        AVAILABLE_MONEY=#{AVAILABLE_MONEY},
+        DEPOSITING_MONEY=#{DEPOSITING_MONEY},
+        WITHDRAWING_MONEY=#{WITHDRAWING_MONEY},
+        CREATE_BY=#{CREATE_BY},
+        CREATE_TIME=#{CREATE_TIME},
+        LAST_UPDATE_BY=#{LAST_UPDATE_BY},
+        LAST_UPDATE_TIME=#{LAST_UPDATE_TIME},
+        COMMISSION=#{COMMISSION},
+        CURRENCY=#{CURRENCY}
+        where BUYER_ID=#{BUYER_ID}
+    </update>
+
+    <select id="getById" parameterType="java.lang.Integer" resultMap="walletAccountfundResultMap" >
+        <include refid="sltwa"></include>
+        where BUYER_ID = #{buyer_id}
+    </select>
+
+    <select id="getTotalCommission" resultType="int">
+        SELECT sum(COMMISSION) FROM `wallet_account_fund`
+    </select>
+</mapper>

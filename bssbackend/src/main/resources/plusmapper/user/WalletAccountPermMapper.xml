@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.WalletAccountPermMapper">
+
+    <resultMap type="WalletAccountPerm" id="walletAccountPermResultMap">
+        <id property="buyer_id" column="buyer_id"/>
+        <result property="is_direct_deposit" column="is_direct_deposit"/>
+        <result property="is_direct_withdraw" column="is_direct_withdraw"/>
+        <result property="is_direct_transaction" column="is_direct_transaction"/>
+        <result property="add_deposit" column="add_deposit"/>
+        <result property="add_withdraw" column="add_withdraw"/>
+
+    </resultMap>
+    <sql id="slt">
+       SELECT `buyer_id`, `is_direct_deposit`, `is_direct_withdraw`,
+       `is_direct_transaction`, `add_deposit`, `add_withdraw`
+       FROM `wallet_account_perm`
+    </sql>
+
+    <select id="getByBuyerId" parameterType="java.lang.Integer" resultType="WalletAccountPerm" resultMap="walletAccountPermResultMap" >
+        <include refid="slt"></include>
+        where buyer_id=#{buyer_id}
+    </select>
+    <insert id="insertWalletAccountPerm" parameterType="WalletFundOrder">
+        insert into wallet_account_perm
+        (buyer_Id,is_direct_deposit,is_direct_withdraw,is_direct_transaction,add_deposit,
+        add_withdraw)
+        values(#{buyer_id},#{is_direct_deposit},#{is_direct_withdraw},#{is_direct_transaction},
+        #{add_deposit},#{add_withdraw})
+    </insert>
+   <update id="updateWalletAccountPerm" parameterType="WalletAccountPerm" >
+       update wallet_account_perm
+       set is_direct_deposit=#{is_direct_deposit},
+       is_direct_withdraw=#{is_direct_withdraw},
+       is_direct_transaction=#{is_direct_transaction},
+       add_deposit=#{add_deposit},
+       add_withdraw=#{add_withdraw}
+       where buyer_id=#{buyer_id}
+
+   </update>
+
+
+    <delete id="deleteByBuyerId" parameterType="java.lang.Integer" >
+        delete from wallet_account_perm
+         where buyer_id = #{buyer_id}
+    </delete>
+
+</mapper>
