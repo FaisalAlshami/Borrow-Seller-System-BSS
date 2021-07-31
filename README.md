@@ -72,6 +72,18 @@ In Back-End:
 
 
 
-
+Register page:
 ![register](https://user-images.githubusercontent.com/23058510/127736763-eaf69237-6df1-4f1b-8336-d506a259a642.PNG)
+
+Login page:
+![login](https://user-images.githubusercontent.com/23058510/127736810-c6936949-3f6f-4eb0-b7b6-e255211f6d1c.PNG)
+
+Adminitrator home page:
+![home_admin](https://user-images.githubusercontent.com/23058510/127736818-a32726f8-d064-441f-bea5-f8085623c12d.PNG)
+
+MVO user home page:
+![home_mvo](https://user-images.githubusercontent.com/23058510/127736825-75c6f345-342d-4eaa-92be-c1798e931e9f.PNG)
+
+Goods list page:
+![bvo_goodlist](https://user-images.githubusercontent.com/23058510/127736829-325feee5-0d0f-4760-9e6b-a998ab0c251e.PNG)
 
