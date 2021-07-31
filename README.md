@@ -44,3 +44,29 @@ orders, The BVO also has the ability to manage his own wallet account. The syste
 search engine for users to search for products specific to their needs. The search engine provides
 an easy and convenient way to search for products where a user can Search for a product
 interactively and the search engine would refine the products available based on the user’s input.
+
+
+# Requirements (The technologies used in this project):
+In Front-End:
+1. VSCode
+2. VueJS
+3. VueClient
+4. Vue-Axios
+5. Vuex
+6. Vue-Router
+7. Element-plus
+
+In Back-End:
+1. IntelliJ IDEA.
+2. Spring boot.
+3. MYSQL Database.
+4. MySQL workbench.
+5. JDK.
+6. MyBatis Plus.
+7. Redis.
+8. Apache Tomcat Server.
+9. JDBC.
+10. MySQL connector.
+11. Spring Boot Security.
+12. Junit
+
