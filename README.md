@@ -78,6 +78,9 @@ Register page:
 Login page:
 ![login](https://user-images.githubusercontent.com/23058510/127736810-c6936949-3f6f-4eb0-b7b6-e255211f6d1c.PNG)
 
+![myvue](https://user-images.githubusercontent.com/23058510/127736888-c26ea083-3599-411f-aeb1-43102a269ded.PNG)
+
+
 Adminitrator home page:
 ![home_admin](https://user-images.githubusercontent.com/23058510/127736818-a32726f8-d064-441f-bea5-f8085623c12d.PNG)
 
@@ -86,4 +89,25 @@ MVO user home page:
 
 Goods list page:
 ![bvo_goodlist](https://user-images.githubusercontent.com/23058510/127736829-325feee5-0d0f-4760-9e6b-a998ab0c251e.PNG)
+
+![bvo_goodlist_add to cart](https://user-images.githubusercontent.com/23058510/127736849-006ba08e-474b-47de-a384-0cefdc9ab02a.PNG)
+
+![bvo_wishlist](https://user-images.githubusercontent.com/23058510/127736852-1d7b63d4-e033-41df-a6e7-ae7a3fc42a86.PNG)
+
+![mvo_addproduct](https://user-images.githubusercontent.com/23058510/127736855-5a57b1c9-0c24-45bd-9f14-32e61c97b11d.PNG)
+
+![mvo_company](https://user-images.githubusercontent.com/23058510/127736858-60785373-afb0-4afc-93bd-8fa18edcd9e3.PNG)
+
+![mvo_company_add](https://user-images.githubusercontent.com/23058510/127736861-91b7561f-c305-4feb-88f0-d6af43c7475e.PNG)
+
+![mvo_goodlist](https://user-images.githubusercontent.com/23058510/127736865-54d1335f-ba41-4bab-93c4-96ffd82d683b.PNG)
+
+![mvo_order_manage](https://user-images.githubusercontent.com/23058510/127736870-48bfa22a-7af3-43be-b3b8-cf82926c7181.png)
+
+![mvo_wallet_account_info](https://user-images.githubusercontent.com/23058510/127736875-985f9e5b-7685-41c6-97e5-1f36a2bbcd74.PNG)
+
+![mvo_wallet_account_transactions](https://user-images.githubusercontent.com/23058510/127736878-89775c3e-3ded-468c-b64f-74221345ab29.PNG)
+
+
+
 
