@@ -1,10 +1,7 @@
 # Borrow-Seller System (BSS)
 
 
-In today’s fast-changing business environment, it’s extremely important to be able to respond to
-clients’ needs in the most effective and timely manner method. Being able to sustain supply chain
-enables businesses to provide their customers with the finest services available, which in turn
-would help the business to grow bigger. Borrow-Seller System (BSS)is an online e-commerce
+Borrow-Seller System (BSS)is an online e-commerce
 web application, which enables online store owners to easily connect with suppliers and buy
 products to sell them in their own stores. This project allows viewing various products available,
 enables registered users to purchase desired products instantly and pushing them directly to their
