@@ -1,5 +1,5 @@
-# BSS
-Borrow-Seller System (BSS)
+# Borrow-Seller System (BSS)
+
 
 In today’s fast-changing business environment, it’s extremely important to be able to respond to
 clients’ needs in the most effective and timely manner method. Being able to sustain supply chain
@@ -21,6 +21,7 @@ consumer is provided with a shopping application to buy goods from suppliers.
 This document will discuss in detail the requirements, design and underlying technologies to create
 and implement this ecommerce website.
 
+![register](https://user-images.githubusercontent.com/23058510/127736763-eaf69237-6df1-4f1b-8336-d506a259a642.PNG)
 BSS (Borrow-Seller System) is a single page application E-commerce website that is designed to
 facilitate the selling and purchasing of products between online store owners and their suppliers.
 Online shopping has become a popular way of shopping for consumers. This new innovation
