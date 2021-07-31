@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.ProProductMapper">
+
+    <update  id="updatePaymentQty" parameterType="int">
+       update pro_product
+        set REPLENISHMENT_PERIOD=REPLENISHMENT_PERIOD-#{ship_qty}
+        where PRO_ID=#{pro_id}
+    </update>
+
+    <update  id="updateRefundQty" parameterType="int">
+       update pro_product
+        set REPLENISHMENT_PERIOD=REPLENISHMENT_PERIOD+#{refund_qty}
+        where PRO_ID=#{pro_id}
+    </update>
+
+    <select id="getTotalGoods" resultType="int">
+        SELECT sum(REPLENISHMENT_PERIOD) FROM `pro_product` where sts_cd='On shelf'
+    </select>
+
+</mapper>

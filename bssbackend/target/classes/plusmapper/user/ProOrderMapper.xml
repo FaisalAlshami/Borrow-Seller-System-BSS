@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.ProOrderMapper">
+
+    <resultMap type="ProOrder" id="proOrderResultMap">
+        <id property="or_id" column="or_id"/>
+        <result property="bvo_user_id" column="bvo_user_id"/>
+        <result property="STR_ID" column="STR_ID"/>
+        <result property="man_id" column="man_id"/>
+        <result property="pro_id" column="pro_id"/>
+        <result property="sts_cd" column="sts_cd"/>
+        <result property="ORDER_ID" column="ORDER_ID"/>
+        <result property="SALES_PRICE" column="SALES_PRICE"/>
+        <result property="QTY" column="QTY"/>
+        <result property="SKU_NO" column="SKU_NO"/>
+        <result property="receive_name" column="receive_name"/>
+        <result property="receive_address" column="receive_address"/>
+        <result property="receive_phone" column="receive_phone"/>
+        <result property="tracking_company" column="tracking_company"/>
+        <result property="tracking_number" column="tracking_number"/>
+        <result property="ORDER_CREATED_TIME" column="ORDER_CREATED_TIME"/>
+        <result property="PAID_TIME" column="PAID_TIME"/>
+        <result property="ship_by" column="ship_by"/>
+        <result property="ship_time" column="ship_time"/>
+        <result property="completed_time" column="completed_time"/>
+        <result property="cancelled_time" column="cancelled_time"/>
+        <result property="canceled_by" column="canceled_by"/>
+        <result property="completed_by" column="completed_by"/>
+        <result property="paid_by" column="paid_by"/>
+        <result property="canceled_by" column="canceled_by"/>
+        <result property="canceled_reason" column="canceled_reason"/>
+        <result property="transaction_withdraw_id" column="transaction_withdraw_id"/>
+        <result property="transaction_deposit_id" column="transaction_deposit_id"/>
+
+        <association property="proStatus" javaType="ProStatus">
+            <id property="statusCode" column="status_code"/>
+            <result property="statusName" column="status_name"/>
+        </association>
+        <association property="proProduct" javaType="ProProduct">
+            <id property="proId" column="pro_id"/>
+            <result property="createdBy" column="CREATED_BY"/>
+            <result property="title" column="TITLE"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+
+    </resultMap>
+    <sql id="slt">
+        SELECT o.`or_id`, o.`bvo_user_id`, o.`STR_ID`, o.`man_id`,
+        o.`pro_id`, o.`sts_cd`, o.`ORDER_ID`, o.`SALES_PRICE`, o.`QTY`,
+        o.`SKU_NO`, o.`receive_name`, o.`receive_address`, o.`receive_phone`,
+        o.`tracking_company`, o.`tracking_number`, o.`ORDER_CREATED_TIME`, o.`PAID_TIME`,
+        o.`ship_by`, o.`ship_time`, o.`completed_time`, o.`cancelled_time`, o.`canceled_by`,
+        o.`completed_by`, o.`paid_by` ,o.`canceled_reason`,o.`transaction_deposit_id`,o.`transaction_withdraw_id`,
+        st.status_name ,
+        p.BRD_NAME,
+        p.TITLE,
+        p.REMARK
+        FROM `pro_order` as o ,pro_status as st, pro_product as p
+    </sql>
+    <delete id="deleteOrder" parameterType="ProOrder">
+        delete from  pro_order
+        where or_id=#{or_id}
+    </delete>
+    <select id="getOrderById" parameterType="int"  resultMap="proOrderResultMap">
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.or_id=#{or_id}
+
+    </select>
+
+    <insert id="sendOrder" parameterType="ProOrder"  useGeneratedKeys="true" keyProperty="or_id">
+        insert into pro_order
+        (or_id,bvo_user_id,man_id,pro_id,sts_cd,
+        ORDER_ID,SALES_PRICE,QTY,SKU_NO,ORDER_CREATED_TIME)
+        values(null,#{bvo_user_id},#{man_id},#{pro_id},0,
+        #{ORDER_ID},#{SALES_PRICE},#{QTY},#{SKU_NO},#{ORDER_CREATED_TIME})
+    </insert>
+
+    <update id="paymentOrder" parameterType="ProOrder"  useGeneratedKeys="true" keyProperty="or_id">
+        update  pro_order set
+        sts_cd=#{sts_cd},
+        receive_name=#{receive_name},
+        receive_address=#{receive_address},
+        receive_phone=#{receive_phone},
+        SALES_PRICE=#{SALES_PRICE},
+        PAID_TIME=#{PAID_TIME},
+        paid_by=#{paid_by}
+        where or_id=#{or_id}
+    </update>
+
+    <update id="refundOrder" parameterType="int"  >
+        update  pro_order set
+        sts_cd=#{sts_cd}
+        where or_id=#{or_id}
+    </update>
+
+    <select id="getBVOSentOrder" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.bvo_user_id=#{bvo_user_id} and o.sts_cd=0
+        order by ORDER_CREATED_TIME DESC
+    </select>
+
+
+    <select id="getBVOCanceledOrder" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.bvo_user_id=#{bvo_user_id} and o.sts_cd=1
+        order by ORDER_CREATED_TIME DESC
+    </select>
+
+    <select id="getBVOWaitPaymentOrder" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.bvo_user_id=#{bvo_user_id} and o.sts_cd=2
+        order by ORDER_CREATED_TIME DESC
+    </select>
+
+    <select id="getBVOOrders" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.bvo_user_id=#{bvo_user_id} and o.sts_cd=#{sts_cd}
+        order by ORDER_CREATED_TIME DESC
+    </select>
+
+
+
+
+    <select id="getMVOOrders" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.man_id=#{man_id} and o.sts_cd=#{sts_cd}
+        order by ORDER_CREATED_TIME DESC
+    </select>
+    <select id="getMVOWPaymentOrder" parameterType="int"  resultMap="proOrderResultMap">
+
+        <include refid="slt"></include>
+        WHERE o.sts_cd=st.status_code and o.pro_id=p.PRO_ID
+        and o.man_id=#{man_id} and o.sts_cd=#{sts_cd}
+        order by ORDER_CREATED_TIME DESC
+    </select>
+    <update id="allowedOrder" parameterType="int"  useGeneratedKeys="true" keyProperty="or_id">
+        update pro_order set sts_cd=2
+        where or_id=#{or_id}
+    </update>
+    <update id="mvoCancelOrder" parameterType="ProOrder"  useGeneratedKeys="true" keyProperty="or_id">
+        update  pro_order set
+        sts_cd=1,
+        cancelled_time=#{cancelled_time},
+        canceled_by=#{canceled_by},
+        canceled_reason=#{canceled_reason}
+        where or_id=#{or_id}
+    </update>
+
+    <update id="mvoShipmentOrder" parameterType="ProOrder"  useGeneratedKeys="true" keyProperty="or_id">
+        update  pro_order set
+        sts_cd=3,
+        tracking_company=#{tracking_company},
+        tracking_number=#{tracking_number},
+        ship_time=#{ship_time},
+        ship_by=#{ship_by}
+        where or_id=#{or_id}
+    </update>
+
+    <update id="bvoDeliveredOrder" parameterType="ProOrder"  useGeneratedKeys="true" keyProperty="or_id">
+        update  pro_order set
+        sts_cd=4,
+        completed_time=#{completed_time},
+        completed_by=#{completed_by}
+        where or_id=#{or_id}
+    </update>
+
+    <update id="updateTransWithdrawId" parameterType="int"   keyProperty="or_id">
+        update  pro_order set
+        transaction_withdraw_id=#{w_id}
+        where or_id=#{or_id}
+    </update>
+    <update id="updateTransDepositId" parameterType="int"   keyProperty="or_id">
+        update  pro_order set
+        transaction_deposit_id=#{d_id}
+        where or_id=#{or_id}
+    </update>
+
+    <select id="getTotalOrders" resultType="int">
+        SELECT count(*) FROM `pro_order` where sts_cd=4 or sts_cd=5
+    </select>
+
+
+
+</mapper>

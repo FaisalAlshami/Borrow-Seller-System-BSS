@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.ManManufacturerMapper">
+
+    <resultMap type="ManManufacturer" id="manManufacturerResultMap">
+        <id property="MAN_ID" column="MAN_ID"/>
+        <result property="NAME_EN" column="NAME_EN"/>
+        <result property="NAME_CN" column="NAME_CN"/>
+        <result property="GMC_REPORT_TYPE" column="GMC_REPORT_TYPE"/>
+        <result property="GMC_REPORT_URL" column="GMC_REPORT_URL"/>
+        <result property="DESCRIPTION" column="DESCRIPTION"/>
+        <result property="CREATED_BY" column="CREATED_BY"/>
+        <result property="CREATION_DATE" column="CREATION_DATE"/>
+
+        <result property="LAST_UPDATE_BY" column="LAST_UPDATE_BY"/>
+        <result property="LAST_UPDATE_DATE" column="LAST_UPDATE_DATE"/>
+        <result property="CALL_CNT" column="CALL_CNT"/>
+        <result property="REMARK" column="REMARK"/>
+        <result property="STS_CD" column="STS_CD"/>
+
+    </resultMap>
+
+    <select id="getByManId" parameterType="java.lang.Integer" resultType="ManManufacturer"  resultMap="manManufacturerResultMap">
+        select * from man_manufacturer where MAN_ID = #{man_id}
+    </select>
+    <insert id="insert" parameterType="ManManufacturer"  useGeneratedKeys="true" keyProperty="MAN_ID">
+        insert into man_manufacturer values(#{MAN_ID},#{NAME_EN},#{NAME_CN},
+        #{GMC_REPORT_TYPE},#{GMC_REPORT_URL},
+        #{DESCRIPTION},#{CREATED_BY},
+        #{CREATION_DATE},#{LAST_UPDATE_BY},
+        #{LAST_UPDATE_DATE},#{CALL_CNT},
+        #{REMARK},#{STS_CD})
+    </insert>
+
+    <update id="update" parameterType="ManManufacturer"  useGeneratedKeys="true" keyProperty="MAN_ID">
+        update  man_manufacturer set
+        NAME_EN=#{NAME_EN},NAME_CN=#{NAME_CN},
+        GMC_REPORT_TYPE=#{GMC_REPORT_TYPE},
+        GMC_REPORT_URL=#{GMC_REPORT_URL},
+        DESCRIPTION=#{DESCRIPTION},
+        LAST_UPDATE_BY=#{LAST_UPDATE_BY},
+        LAST_UPDATE_DATE=#{LAST_UPDATE_DATE},
+        CALL_CNT=#{CALL_CNT},
+        REMARK=#{REMARK},
+        STS_CD=#{STS_CD}
+        where MAN_ID=#{MAN_ID}
+    </update>
+
+    <delete id="delete" parameterType="ManManufacturer">
+        delete from  man_manufacturer
+        where MAN_ID=#{MAN_ID}
+    </delete>
+
+
+</mapper>

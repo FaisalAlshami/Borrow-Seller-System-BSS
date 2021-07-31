@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.SysCompanyMapper">
+
+    <resultMap type="SysCompany" id="companyResultMap">
+        <id property="userId" column="user_id"/>
+        <result property="companyName" column="company_name"/>
+        <result property="companyPhone" column="company_phone"/>
+        <result property="companyAddress" column="company_address"/>
+        <result property="companyAddress" column="company_address"/>
+        <association property="sysUser" javaType="SysUser">
+            <id property="userId" column="USER_ID"/>
+            <result property="name" column="NAME"/>
+            <result property="username" column="USERNAME"/>
+        </association>
+    </resultMap>
+    <select id="getAllCompanyMVO"  resultMap="companyResultMap">
+        Select
+        company.user_id as user_id,
+		us.`NAME` as name,
+		us.`USERNAME` as username,
+        company.company_name as company_name,
+        company.company_phone as company_phone,
+		company.company_address as company_address,
+		company.company_description as company_description
+        from sys_company as company,sys_user as us
+        where company.user_id=us.USER_ID
+    </select>
+</mapper>

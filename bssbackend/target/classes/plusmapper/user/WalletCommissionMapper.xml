@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.WalletCommissionMapper">
+
+    <resultMap type="WalletCommission" id="walletCommissionResultMap">
+        <id property="commission_id" column="commission_id"/>
+        <result property="percent" column="percent"/>
+        <result property="transaction_type_id" column="transaction_type_id"/>
+        <result property="status" column="status"/>
+
+        <association property="commissionType" javaType="CommissionType">
+            <id property="transaction_type_id" column="transaction_type_id"/>
+            <result property="transaction_type_name" column="transaction_type_name"/>
+        </association>
+
+    </resultMap>
+    <insert id="insertWalletComm" parameterType="WalletCommission">
+        insert into wallet_commission
+        (commission_id,percent,transaction_type_id)
+        values(null,#{percent},#{transaction_type_id})
+    </insert>
+    <update  id="updateWalletComm" parameterType="WalletCommission">
+       update wallet_commission set
+         percent=#{percent},
+         transaction_type_id=#{transaction_type_id}
+        where commission_id=#{commission_id}
+    </update>
+
+    <select id="getByIdWithCommTypeId" parameterType="java.lang.Integer" resultMap="walletCommissionResultMap" >
+        Select commission_id,
+        percent,transaction_type_id
+        from wallet_commission
+         where commission_id = #{commission_id} and
+         transaction_type_id=#{transaction_type_id}
+    </select>
+    <select id="getByCommTypeId" parameterType="java.lang.Integer" resultMap="walletCommissionResultMap" >
+        Select commission_id,
+        percent,transaction_type_id
+        from wallet_commission
+         where transaction_type_id=#{transaction_type_id}
+    </select>
+    <select id="getByCommId" parameterType="java.lang.Integer" resultMap="walletCommissionResultMap" >
+        Select wc.commission_id,
+        wc.percent,wc.transaction_type_id,
+        ct.transaction_type_name,
+        wc.status
+        from wallet_commission wc, transaction_type ct
+         where wc.transaction_type_id= ct.transaction_type_id
+         and wc.commission_id = #{commission_id}
+    </select>
+    <select id="getAll" resultMap="walletCommissionResultMap" >
+        Select wc.commission_id,
+        wc.percent,wc.transaction_type_id,
+        ct.transaction_type_name,wc.status
+        from wallet_commission wc, transaction_type ct
+        where wc.transaction_type_id= ct.transaction_type_id
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from wallet_commission
+         where commission_id = #{commission_id}
+    </delete>
+
+</mapper>

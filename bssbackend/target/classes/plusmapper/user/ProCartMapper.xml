@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.ProCartMapper">
+
+    <resultMap type="ProCart" id="cartResultMap">
+        <id property="cartId" column="Cart_id"/>
+        <result property="borrowUserId" column="user_id"/>
+        <result property="proId" column="pro_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="status" column="status"/>
+        <result property="createDate" column="createDate"/>
+        <association property="sysUser" javaType="SysUser">
+            <id property="userId" column="user_id"/>
+            <result property="name" column="NAME"/>
+            <result property="username" column="USERNAME"/>
+        </association>
+        <association property="proStatus" javaType="ProStatus">
+            <id property="statusCode" column="status_code"/>
+            <result property="statusName" column="status_name"/>
+        </association>
+
+        <association property="proProduct" javaType="ProProduct">
+            <id property="proId" column="pro_id"/>
+            <result property="createdBy" column="CREATED_BY"/>
+            <result property="title" column="TITLE"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+    </resultMap>
+
+    <select id="selectByBorrowUserId" parameterType="int"  resultMap="cartResultMap">
+        Select
+        cart.Cart_id as Cart_id,
+        us.USER_ID as user_id,
+        pro.PRO_ID as pro_id,
+        us.`NAME` as username,
+        pro.TITLE as Title,
+        pro.REMARK as remark,
+        cart.quantity as quantity,
+        (select status_name from pro_status where status_code=cart.status) as status_name,
+        cart.createDate as createDate
+        from pro_cart as cart,sys_user as us, pro_product as pro
+        where cart.user_id=us.USER_ID and cart.pro_id=pro.PRO_ID
+        and cart.user_id=#{id}
+    </select>
+
+    <select id="selectByBrandUserId" parameterType="int"  resultMap="cartResultMap">
+        Select
+        cart.Cart_id as Cart_id,
+        us.USER_ID as user_id,
+        pro.PRO_ID as pro_id,
+        us.`NAME` as username,
+        pro.TITLE as Title,
+        pro.REMARK as remark,
+        cart.quantity as quantity,
+        (select status_name from pro_status where status_code=cart.status) as status_name,
+        cart.createDate as createDate
+        from pro_cart as cart,sys_user as us, pro_product as pro
+        where cart.user_id=us.USER_ID and cart.pro_id=pro.PRO_ID
+        and pro.USER_ID=#{brandusername}
+    </select>
+
+
+</mapper>

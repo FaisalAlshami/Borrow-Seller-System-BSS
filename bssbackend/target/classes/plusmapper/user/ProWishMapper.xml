@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.ProWishMapper">
+
+    <resultMap type="ProWish" id="wishResultMap">
+        <id property="wishId" column="wish_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="proId" column="pro_id"/>
+        <result property="createDate" column="createDate"/>
+        <association property="sysUser" javaType="SysUser">
+            <id property="userId" column="user_id"/>
+            <result property="name" column="NAME"/>
+            <result property="username" column="USERNAME"/>
+        </association>
+
+        <association property="proProduct" javaType="ProProduct">
+            <id property="proId" column="pro_id"/>
+            <result property="createdBy" column="CREATED_BY"/>
+            <result property="title" column="TITLE"/>
+            <result property="remark" column="REMARK"/>
+        </association>
+    </resultMap>
+
+    <select id="selectByBorrowUserId" parameterType="int"  resultMap="wishResultMap">
+        Select
+        wish.wish_id as wish_id,
+        us.USER_ID as user_id,
+        pro.PRO_ID as pro_id,
+        us.`NAME` as username,
+        pro.TITLE as Title,
+        pro.REMARK as remark,
+        wish.createDate as createDate
+        from pro_wish as wish,sys_user as us, pro_product as pro
+        where wish.user_id=us.USER_ID and wish.pro_id=pro.PRO_ID
+        and wish.user_id=#{id}
+    </select>
+
+    <select id="verfiyWishByProIdUserId" parameterType="int"  resultMap="wishResultMap">
+        Select
+        wish.wish_id as wish_id,
+        us.USER_ID as user_id,
+        pro.PRO_ID as pro_id,
+        us.`NAME` as username,
+        pro.TITLE as Title,
+        pro.REMARK as remark,
+        wish.createDate as createDate
+        from pro_wish as wish,sys_user as us, pro_product as pro
+        where wish.user_id=us.USER_ID and wish.pro_id=pro.PRO_ID
+        and wish.PRO_ID=#{pid} and wish.USER_ID=#{uid}
+    </select>
+
+
+
+</mapper>

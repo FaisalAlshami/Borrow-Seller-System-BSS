@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.user.mapper.WalletAccountMapper">
+
+    <resultMap type="WalletAccount" id="walletAccountResultMap">
+        <id property="BUYER_ID" column="BUYER_ID"/>
+        <result property="ACCOUNT_NAME" column="ACCOUNT_NAME"/>
+        <result property="EMAIL" column="EMAIL"/>
+        <result property="PASSWORD" column="PASSWORD"/>
+        <result property="ACTIVE_TIME" column="ACTIVE_TIME"/>
+        <result property="IS_ACTIVE" column="IS_ACTIVE"/>
+        <result property="STATUS" column="STATUS"/>
+        <result property="CREATE_BY" column="CREATE_BY"/>
+        <result property="CREATE_TIME" column="CREATE_TIME"/>
+        <result property="LAST_UPDATE_BY" column="LAST_UPDATE_BY"/>
+        <result property="LAST_UPDATE_TIME" column="LAST_UPDATE_TIME"/>
+        <result property="ACCOUNT_TYPE" column="ACCOUNT_TYPE"/>
+        <result property="HOLD_ORDER_TIME" column="HOLD_ORDER_TIME"/>
+        <result property="AUTO_PAY_STATUS" column="AUTO_PAY_STATUS"/>
+        <association property="walletAccountPerm" javaType="WalletAccountPerm">
+            <id property="buyer_id" column="buyer_id"/>
+            <result property="is_direct_deposit" column="is_direct_deposit"/>
+            <result property="is_direct_withdraw" column="is_direct_withdraw"/>
+            <result property="is_direct_transaction" column="is_direct_transaction"/>
+            <result property="add_deposit" column="add_deposit"/>
+            <result property="add_withdraw" column="add_withdraw"/>
+        </association>
+        <association property="walletAccountFund" javaType="WalletAccountFund">
+            <id property="BUYER_ID" column="BUYER_ID"/>
+            <result property="AVAILABLE_MONEY" column="AVAILABLE_MONEY"/>
+            <result property="DEPOSITING_MONEY" column="DEPOSITING_MONEY"/>
+            <result property="WITHDRAWING_MONEY" column="WITHDRAWING_MONEY"/>
+            <result property="COMMISSION" column="COMMISSION"/>
+            <result property="CREATE_BY" column="CREATE_BY"/>
+            <result property="CREATE_TIME" column="CREATE_TIME"/>
+            <result property="LAST_UPDATE_BY" column="LAST_UPDATE_BY"/>
+            <result property="LAST_UPDATE_TIME" column="LAST_UPDATE_TIME"/>
+            <result property="CURRENCY" column="CURRENCY"/>
+        </association>
+
+
+    </resultMap>
+    <sql id="sltwa">
+        SELECT o.`BUYER_ID`, o.`ACCOUNT_NAME`, o.`EMAIL`, o.`PASSWORD`,
+        o.`ACTIVE_TIME`, o.`IS_ACTIVE`, o.`STATUS`, o.`CREATE_BY`, o.`CREATE_TIME`,
+        o.`LAST_UPDATE_BY`, o.`LAST_UPDATE_TIME`, o.`ACCOUNT_TYPE`, o.`HOLD_ORDER_TIME`,
+        o.`AUTO_PAY_STATUS`,
+        (f.DEPOSITING_MONEY-((-1)*(f.WITHDRAWING_MONEY))) as AVAILABLE_MONEY,
+        f.DEPOSITING_MONEY,f.WITHDRAWING_MONEY,
+        f.COMMISSION, f.CREATE_BY,f.CREATE_TIME,
+        f.LAST_UPDATE_BY,f.LAST_UPDATE_TIME,f.CURRENCY,
+        p.is_direct_deposit, p.is_direct_withdraw,
+       p.is_direct_transaction, p.add_deposit, p.add_withdraw
+        FROM `wallet_account` as o, wallet_account_fund f, wallet_account_perm p
+		where o.BUYER_ID=f.BUYER_ID and p.buyer_id=o.BUYER_ID
+    </sql>
+    <insert id="insertWalletAcc" parameterType="WalletAccount">
+        insert into wallet_account
+        (BUYER_ID,ACCOUNT_NAME,EMAIL,PASSWORD,ACTIVE_TIME,
+        IS_ACTIVE,STATUS,CREATE_BY,CREATE_TIME,LAST_UPDATE_BY,
+        LAST_UPDATE_TIME,ACCOUNT_TYPE,HOLD_ORDER_TIME,AUTO_PAY_STATUS)
+        values(#{BUYER_ID},#{ACCOUNT_NAME},#{EMAIL},#{PASSWORD},#{ACTIVE_TIME},
+        #{IS_ACTIVE},#{STATUS},#{CREATE_BY},#{CREATE_TIME},#{LAST_UPDATE_BY},
+        #{LAST_UPDATE_TIME},#{ACCOUNT_TYPE},#{HOLD_ORDER_TIME},#{AUTO_PAY_STATUS})
+    </insert>
+    <update  id="updateWalletAcc" parameterType="WalletAccount">
+       update wallet_account set
+         ACCOUNT_NAME=#{ACCOUNT_NAME},EMAIL=#{EMAIL},PASSWORD=#{PASSWORD},
+         ACTIVE_TIME=#{ACTIVE_TIME},
+        IS_ACTIVE=#{IS_ACTIVE},STATUS=#{STATUS},CREATE_BY=#{CREATE_BY},
+        CREATE_TIME=#{CREATE_TIME},LAST_UPDATE_BY=#{LAST_UPDATE_BY},
+        LAST_UPDATE_TIME=#{LAST_UPDATE_TIME},ACCOUNT_TYPE=#{ACCOUNT_TYPE},
+        HOLD_ORDER_TIME=#{HOLD_ORDER_TIME},AUTO_PAY_STATUS=#{AUTO_PAY_STATUS}
+        where BUYER_ID=#{BUYER_ID}
+    </update>
+
+    <select id="getByBuyerId" parameterType="java.lang.Integer" resultMap="walletAccountResultMap" >
+        <include refid="sltwa"></include>
+         and  o.BUYER_ID = #{buyer_id}
+    </select>
+
+    <select id="getAll"  resultType="WalletAccount" resultMap="walletAccountResultMap" >
+        <include refid="sltwa"></include>
+    </select>
+
+</mapper>
