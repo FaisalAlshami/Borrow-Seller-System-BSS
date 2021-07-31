@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.springboottest.mapper.SalegradeMapper">
+  <resultMap id="BaseResultMap" type="com.neusoft.springboottest.entity.Salegrade">
+    <result column="GRADE" jdbcType="INTEGER" property="grade" />
+    <result column="LOSAL" jdbcType="INTEGER" property="losal" />
+    <result column="HISAL" jdbcType="INTEGER" property="hisal" />
+  </resultMap>
+  <insert id="insert" parameterType="com.neusoft.springboottest.entity.Salegrade">
+    <selectKey keyProperty="grade" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into salgrade (LOSAL, HISAL)
+    values (#{losal,jdbcType=INTEGER}, #{hisal,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.neusoft.springboottest.entity.Salegrade">
+    <selectKey keyProperty="grade" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into salgrade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="losal != null">
+        LOSAL,
+      </if>
+      <if test="hisal != null">
+        HISAL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="losal != null">
+        #{losal,jdbcType=INTEGER},
+      </if>
+      <if test="hisal != null">
+        #{hisal,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
